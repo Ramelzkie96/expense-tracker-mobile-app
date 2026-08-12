@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/context/ThemeContext';
 
 const budgets = [
   {
@@ -54,96 +54,240 @@ const budgets = [
 ];
 
 export default function BudgetsScreen() {
+  const { darkMode, theme } = useTheme();
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
+  <SafeAreaView
+    style={[styles.safeArea, { backgroundColor: theme.background }]}
+  >
+    <View
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={[styles.headerTitle, { color: theme.text }]}>
+            Budgets
+          </Text>
+
+          <Pressable
+            style={[
+              styles.monthButton,
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.monthText,
+                { color: theme.subText },
+              ]}
+            >
+              This Month
+            </Text>
+
+            <Ionicons
+              name="chevron-down"
+              size={16}
+              color={theme.subText}
+            />
+          </Pressable>
+        </View>
+
+        {/* Overall Budget */}
+        <View
+          style={[
+            styles.summaryCard,
+            {
+              backgroundColor: theme.card,
+              borderColor: theme.border,
+            },
+          ]}
         >
-          {/* Header */}
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>Budgets</Text>
+          <Text
+            style={[
+              styles.summaryTitle,
+              { color: theme.subText },
+            ]}
+          >
+            Overall Budget
+          </Text>
 
-            <Pressable style={styles.monthButton}>
-              <Text style={styles.monthText}>This Month</Text>
-              <Ionicons name="chevron-down" size={16} color="#6B7280" />
-            </Pressable>
+          <View style={styles.summaryRow}>
+            <Text
+              style={[
+                styles.leftAmount,
+                { color: theme.text },
+              ]}
+            >
+              ₱8,300.00
+            </Text>
+
+            <Text
+              style={[
+                styles.leftText,
+                { color: theme.subText },
+              ]}
+            >
+              {' '}left
+            </Text>
           </View>
 
-          {/* Overall Budget */}
-          <View style={styles.summaryCard}>
-            <Text style={styles.summaryTitle}>Overall Budget</Text>
+          <Text
+            style={[
+              styles.summarySub,
+              { color: theme.subText },
+            ]}
+          >
+            ₱10,500.00 / ₱18,800.00
+          </Text>
 
-            <View style={styles.summaryRow}>
-              <Text style={styles.leftAmount}>₱8,300.00</Text>
-              <Text style={styles.leftText}> left</Text>
+          <View style={styles.progressRow}>
+            <View
+              style={[
+                styles.progressTrack,
+                { backgroundColor: theme.card2 },
+              ]}
+            >
+              <View
+                style={[
+                  styles.progressFill,
+                  {
+                    width: '56%',
+                    backgroundColor: theme.primary,
+                  },
+                ]}
+              />
             </View>
 
-            <Text style={styles.summarySub}>₱10,500.00 / ₱18,800.00</Text>
-
-            <View style={styles.progressRow}>
-              <View style={styles.progressTrack}>
-                <View style={[styles.progressFill, { width: '56%' }]} />
-              </View>
-
-              <Text style={styles.progressPercent}>56%</Text>
-            </View>
+            <Text
+              style={[
+                styles.progressPercent,
+                { color: theme.subText },
+              ]}
+            >
+              56%
+            </Text>
           </View>
+        </View>
 
-          {/* Section Header */}
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Your Budgets</Text>
+        {/* Section Header */}
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, { color: theme.text }]}>
+            Your Budgets
+          </Text>
 
-            <Pressable style={styles.addBudgetButton}>
-              <Ionicons name="add" size={18} color={Colors.primary} />
-              <Text style={styles.addBudgetText}>Add Budget</Text>
-            </Pressable>
-          </View>
+          <Pressable
+            style={[
+              styles.addBudgetButton,
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <Ionicons
+              name="add"
+              size={18}
+              color={theme.primary}
+            />
 
-          {/* Budget Cards */}
-          {budgets.map((item) => (
-            <View key={item.title} style={styles.budgetCard}>
-              <View style={styles.budgetTop}>
-                <View style={styles.budgetLeft}>
-                  <View style={styles.iconCircle}>
-                    <Text style={styles.emoji}>{item.icon}</Text>
-                  </View>
+            <Text
+              style={[
+                styles.addBudgetText,
+                { color: theme.primary },
+              ]}
+            >
+              Add Budget
+            </Text>
+          </Pressable>
+        </View>
 
-                  <View>
-                    <Text style={styles.budgetTitle}>{item.title}</Text>
-                    <Text style={styles.budgetSub}>
-                      {item.spent} / {item.limit}
-                    </Text>
-                  </View>
-                </View>
-
-                <Text style={styles.percentText}>{item.percent}%</Text>
-              </View>
-
-              <View style={styles.progressTrackLarge}>
+        {/* Budget Cards */}
+        {budgets.map((item) => (
+          <View
+            key={item.title}
+            style={[
+              styles.budgetCard,
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <View style={styles.budgetTop}>
+              <View style={styles.budgetLeft}>
                 <View
                   style={[
-                    styles.progressFillLarge,
-                    {
-                      width: `${item.percent}%`,
-                      backgroundColor: item.color,
-                    },
+                    styles.iconCircle,
+                    { backgroundColor: theme.card2 },
                   ]}
-                />
+                >
+                  <Text style={styles.emoji}>{item.icon}</Text>
+                </View>
+
+                <View>
+                  <Text
+                    style={[
+                      styles.budgetTitle,
+                      { color: theme.text },
+                    ]}
+                  >
+                    {item.title}
+                  </Text>
+
+                  <Text
+                    style={[
+                      styles.budgetSub,
+                      { color: theme.subText },
+                    ]}
+                  >
+                    {item.spent} / {item.limit}
+                  </Text>
+                </View>
               </View>
+
+              <Text
+                style={[
+                  styles.percentText,
+                  { color: theme.text },
+                ]}
+              >
+                {item.percent}%
+              </Text>
             </View>
-          ))}
-        </ScrollView>
-      </View>
-    </SafeAreaView>
-  );
+
+            <View
+              style={[
+                styles.progressTrackLarge,
+                { backgroundColor: theme.card2 },
+              ]}
+            >
+              <View
+                style={[
+                  styles.progressFillLarge,
+                  {
+                    width: `${item.percent}%`,
+                    backgroundColor: item.color,
+                  },
+                ]}
+              />
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    </View>
+  </SafeAreaView>
+);
 }
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
   },
 
   container: {
@@ -165,44 +309,39 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#111827',
   },
 
   monthButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
   },
 
   monthText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#374151',
     marginRight: 4,
   },
 
   summaryCard: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 22,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
     marginBottom: 28,
+
     shadowColor: '#000',
-    shadowOpacity: 0.03,
-    shadowRadius: 10,
-    elevation: 2,
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
   },
 
   summaryTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
     marginBottom: 14,
   },
 
@@ -220,13 +359,11 @@ const styles = StyleSheet.create({
 
   leftText: {
     fontSize: 20,
-    color: '#6B7280',
     fontWeight: '600',
   },
 
   summarySub: {
     fontSize: 16,
-    color: '#6B7280',
     fontWeight: '500',
     marginBottom: 18,
   },
@@ -239,14 +376,12 @@ const styles = StyleSheet.create({
   progressTrack: {
     flex: 1,
     height: 8,
-    backgroundColor: '#E5E7EB',
     borderRadius: 999,
     overflow: 'hidden',
   },
 
   progressFill: {
     height: '100%',
-    backgroundColor: '#16A34A',
     borderRadius: 999,
   },
 
@@ -254,7 +389,6 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     fontSize: 16,
     fontWeight: '700',
-    color: '#374151',
     width: 42,
     textAlign: 'right',
   },
@@ -269,27 +403,27 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111827',
   },
 
   addBudgetButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 14,
+    borderWidth: 1,
   },
 
   addBudgetText: {
-    color: Colors.primary,
     fontSize: 16,
     fontWeight: '700',
     marginLeft: 4,
   },
 
   budgetCard: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 20,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
     marginBottom: 18,
   },
 
@@ -310,7 +444,6 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#F9FAFB',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 14,
@@ -323,12 +456,10 @@ const styles = StyleSheet.create({
   budgetTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
   },
 
   budgetSub: {
     fontSize: 15,
-    color: '#6B7280',
     marginTop: 4,
     fontWeight: '500',
   },
@@ -336,12 +467,10 @@ const styles = StyleSheet.create({
   percentText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#374151',
   },
 
   progressTrackLarge: {
     height: 10,
-    backgroundColor: '#E5E7EB',
     borderRadius: 999,
     overflow: 'hidden',
   },

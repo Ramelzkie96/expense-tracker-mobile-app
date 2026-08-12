@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, ScrollView, Pressable, } from 'react-native'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/context/ThemeContext';
 
 const transactions = [
   {
@@ -47,120 +47,287 @@ const transactions = [
 ];
 
 export default function HomeScreen() {
+  const { darkMode, theme } = useTheme();
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
-        >
-          {/* Top Section */}
-          <View style={styles.topSection}>
-            {/* Header */}
-            <View style={styles.header}>
-              <View>
-                <Text style={styles.greeting}>👋 Good morning,</Text>
-                <Text style={styles.name}>John Doe!</Text>
-              </View>
+  <SafeAreaView
+    style={[styles.safeArea, { backgroundColor: theme.background }]}
+  >
+    <View
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Top Section */}
+        <View style={[ styles.topSection, { backgroundColor: darkMode ? '#050814' : '#F0FDF4', }, ]} >
+          {/* Header */}
+          <View style={styles.header}>
+            <View>
+              <Text style={[styles.greeting, { color: theme.subText }]}>
+                👋 Good morning,
+              </Text>
 
-              <Pressable style={styles.bell}>
-                <Ionicons
-                  name="notifications-outline"
-                  size={24}
-                  color="#111827"
-                />
-              </Pressable>
+              <Text style={[styles.name, { color: theme.text }]}>
+                John Doe!
+              </Text>
             </View>
 
-            {/* Balance Card */}
-            <View style={styles.balanceCard}>
-              <View style={styles.balanceTop}>
-                <Text style={styles.balanceLabel}>Total Balance</Text>
-
-                <View style={styles.monthBadge}>
-                  <Text style={styles.monthText}>This Month</Text>
-                  <Ionicons
-                    name="chevron-down"
-                    size={16}
-                    color="#6B7280"
-                  />
-                </View>
-              </View>
-
-              <Text style={styles.balanceAmount}>₱24,500.00</Text>
-            </View>
-          </View>
-
-          {/* Income & Expenses */}
-          <View style={styles.statsRow}>
-            <View style={styles.statCard}>
-              <View style={[styles.statIcon, { backgroundColor: '#DCFCE7' }]}>
-                <Ionicons name="arrow-down" size={18} color="#16A34A" />
-              </View>
-
-              <Text style={styles.statTitle}>Income</Text>
-              <Text style={styles.statAmount}>₱35,000.00</Text>
-            </View>
-
-            <View style={styles.statCard}>
-              <View style={[styles.statIcon, { backgroundColor: '#FEE2E2' }]}>
-                <Ionicons name="arrow-up" size={18} color="#EF4444" />
-              </View>
-
-              <Text style={styles.statTitle}>Expenses</Text>
-              <Text style={styles.statAmount}>₱10,500.00</Text>
-            </View>
-          </View>
-
-          {/* Recent Transactions */}
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Recent Transactions</Text>
-            <Pressable>
-              <Text style={styles.seeAll}>See all</Text>
+            <Pressable
+              style={[
+                styles.bell,
+                {
+                  backgroundColor: darkMode ? '#050814' : theme.card,
+                  borderColor: theme.border,
+                },
+              ]}
+            >
+              <Ionicons
+                name="notifications-outline"
+                size={24}
+                color={theme.icon}
+              />
             </Pressable>
           </View>
 
-          <View style={styles.transactionsCard}>
-            {transactions.map((item, index) => (
-              <View key={item.id}>
-                <View style={styles.transactionItem}>
-                  <View style={styles.left}>
-                    <View style={styles.emojiCircle}>
-                      <Text style={styles.emoji}>{item.icon}</Text>
-                    </View>
+          {/* Balance Card */}
+          <View
+            style={[
+              styles.balanceCard,
+              {
+                backgroundColor: darkMode ? '#050814' : theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <View style={styles.balanceTop}>
+              <Text
+                style={[
+                  styles.balanceLabel,
+                  { color: theme.subText },
+                ]}
+              >
+                Total Balance
+              </Text>
 
-                    <View>
-                      <Text style={styles.transactionTitle}>{item.title}</Text>
-                      <Text style={styles.transactionTime}>{item.time}</Text>
-                    </View>
-                  </View>
+              <View
+                style={[
+                  styles.monthBadge,
+                  { backgroundColor: theme.card2 },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.monthText,
+                    { color: theme.subText },
+                  ]}
+                >
+                  This Month
+                </Text>
 
-                  <Text
-                    style={[
-                      styles.transactionAmount,
-                      item.income ? styles.income : styles.expense,
-                    ]}
-                  >
-                    {item.amount}
-                  </Text>
-                </View>
-
-                {index !== transactions.length - 1 && (
-                  <View style={styles.divider} />
-                )}
+                <Ionicons
+                  name="chevron-down"
+                  size={16}
+                  color={theme.subText}
+                />
               </View>
-            ))}
+            </View>
+
+            <Text
+              style={[
+                styles.balanceAmount,
+                { color: theme.text },
+              ]}
+            >
+              ₱24,500.00
+            </Text>
+          </View>
+        </View>
+
+        {/* Income & Expenses */}
+        <View style={styles.statsRow}>
+          <View
+            style={[
+              styles.statCard,
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <View
+              style={[
+                styles.statIcon,
+                { backgroundColor: '#DCFCE7' },
+              ]}
+            >
+              <Ionicons
+                name="arrow-down"
+                size={18}
+                color="#16A34A"
+              />
+            </View>
+
+            <Text
+              style={[
+                styles.statTitle,
+                { color: theme.subText },
+              ]}
+            >
+              Income
+            </Text>
+
+            <Text
+              style={[
+                styles.statAmount,
+                { color: theme.text },
+              ]}
+            >
+              ₱35,000.00
+            </Text>
           </View>
 
-          {/* Add Transaction */}
-          <Pressable style={styles.addButton}>
-            <Ionicons name="add" size={22} color="white" />
-            <Text style={styles.addButtonText}>Add Transaction</Text>
+          <View
+            style={[
+              styles.statCard,
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <View
+              style={[
+                styles.statIcon,
+                { backgroundColor: '#FEE2E2' },
+              ]}
+            >
+              <Ionicons
+                name="arrow-up"
+                size={18}
+                color="#EF4444"
+              />
+            </View>
+
+            <Text
+              style={[
+                styles.statTitle,
+                { color: theme.subText },
+              ]}
+            >
+              Expenses
+            </Text>
+
+            <Text
+              style={[
+                styles.statAmount,
+                { color: theme.text },
+              ]}
+            >
+              ₱10,500.00
+            </Text>
+          </View>
+        </View>
+
+        {/* Recent Transactions */}
+        <View style={styles.sectionHeader}>
+          <Text
+            style={[
+              styles.sectionTitle,
+              { color: theme.text },
+            ]}
+          >
+            Recent Transactions
+          </Text>
+
+          <Pressable>
+            <Text
+              style={[
+                styles.seeAll,
+                { color: theme.primary },
+              ]}
+            >
+              See all
+            </Text>
           </Pressable>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
-  );
+        </View>
+
+        <View
+          style={[
+            styles.transactionsCard,
+            {
+              backgroundColor: theme.card,
+              borderColor: theme.border,
+            },
+          ]}
+        >
+          {transactions.map((item, index) => (
+            <View key={item.id}>
+              <View style={styles.transactionItem}>
+                <View style={styles.left}>
+                  <View
+                    style={[
+                      styles.emojiCircle,
+                      { backgroundColor: theme.card2 },
+                    ]}
+                  >
+                    <Text style={styles.emoji}>{item.icon}</Text>
+                  </View>
+
+                  <View>
+                    <Text
+                      style={[
+                        styles.transactionTitle,
+                        { color: theme.text },
+                      ]}
+                    >
+                      {item.title}
+                    </Text>
+
+                    <Text
+                      style={[
+                        styles.transactionTime,
+                        { color: theme.subText },
+                      ]}
+                    >
+                      {item.time}
+                    </Text>
+                  </View>
+                </View>
+
+                <Text 
+                  style={[ 
+                    styles.transactionAmount,
+                     { color: item.income ? '#22C55E' : theme.text, }, ]} > {item.amount} 
+                </Text>
+              </View>
+
+              {index !== transactions.length - 1 && (
+                <View
+                  style={[
+                    styles.divider,
+                    { backgroundColor: theme.divider },
+                  ]}
+                />
+              )}
+            </View>
+          ))}
+        </View>
+
+        {/* Add Transaction */}
+        <Pressable
+          style={[
+            styles.addButton,
+            { backgroundColor: theme.primary },
+          ]}
+        >
+          <Ionicons name="add" size={22} color="white" />
+          <Text style={styles.addButtonText}>Add Transaction</Text>
+        </Pressable>
+      </ScrollView>
+    </View>
+  </SafeAreaView>
+);
 }
 
 const styles = StyleSheet.create({
@@ -319,11 +486,7 @@ const styles = StyleSheet.create({
     color: '#111827',
   },
 
-  seeAll: {
-    color: Colors.primary,
-    fontWeight: '700',
-    fontSize: 14,
-  },
+  seeAll: { fontWeight: '700', fontSize: 14, },
 
   transactionsCard: {
     marginHorizontal: 24,
@@ -392,16 +555,13 @@ const styles = StyleSheet.create({
     marginLeft: 76,
   },
 
-  addButton: {
-    marginHorizontal: 24,
-    marginTop: 24,
-    marginBottom: 24,
-    backgroundColor: Colors.primary,
-    borderRadius: 18,
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+  addButton: { 
+    marginHorizontal: 24, 
+    marginTop: 24, 
+    marginBottom: 24, 
+    borderRadius: 18, height: 56, 
+    flexDirection: 'row', alignItems: 'center', 
+    justifyContent: 'center', 
   },
 
   addButtonText: {

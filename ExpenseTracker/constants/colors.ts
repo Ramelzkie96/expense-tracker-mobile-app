@@ -1,6 +1,26 @@
-export const Colors = { 
+export const Colors = {
+  light: {
     primary: '#22C55E',
     primaryDark: '#16A34A',
-    text: '#111827', subText: '#6B7280',
-    border: '#E5E7EB', background: '#FFFFFF', 
+    background: '#F8FAFC',
+    card: '#FFFFFF',
+    card2: '#F9FAFB',
+    text: '#111827',
+    subText: '#6B7280',
+    border: '#F3F4F6',
+    divider: '#E5E7EB',
+    icon: '#111827',
+  },
+  dark: {
+    primary: '#22C55E',
+    primaryDark: '#16A34A',
+    background: '#000000',
+    card: '#0B0F14',
+    card2: '#111827',
+    text: '#FFFFFF',
+    subText: '#9CA3AF',
+    border: '#1F2937',
+    divider: '#111827',
+    icon: '#FFFFFF',
+  },
 };

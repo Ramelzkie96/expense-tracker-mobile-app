@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/colors';
+import { useTheme } from '@/context/ThemeContext';
 
 const sections = [
   {
@@ -43,110 +44,237 @@ const sections = [
 ];
 
 export default function TransactionsScreen() {
+  const { darkMode, theme } = useTheme();
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
-        >
-          {/* Header */}
-          <Text style={styles.headerTitle}>Transactions</Text>
+  <SafeAreaView
+    style={[styles.safeArea, { backgroundColor: theme.background }]}
+  >
+    <View
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Header */}
+        <Text style={[styles.headerTitle, { color: theme.text }]}>
+          Transactions
+        </Text>
 
-          {/* Search */}
-          <View style={styles.searchRow}>
-            <View style={styles.searchContainer}>
-              <Ionicons name="search" size={20} color="#6B7280" />
-              <TextInput
-                placeholder="Search transactions..."
-                placeholderTextColor="#9CA3AF"
-                style={styles.searchInput}
-              />
+        {/* Search */}
+        <View style={styles.searchRow}>
+          <View
+            style={[
+              styles.searchContainer,
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <Ionicons
+              name="search"
+              size={20}
+              color={theme.subText}
+            />
+
+            <TextInput
+              placeholder="Search transactions..."
+              placeholderTextColor={theme.subText}
+              style={[
+                styles.searchInput,
+                { color: theme.text },
+              ]}
+            />
+          </View>
+
+          <Pressable
+            style={[
+              styles.filterButton,
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <Ionicons
+              name="options-outline"
+              size={22}
+              color={theme.icon}
+            />
+          </Pressable>
+        </View>
+
+        {/* Filter Chips */}
+        <View style={styles.chipsRow}>
+          <Pressable
+            style={[
+              styles.chip,
+              styles.chipActive,
+              { backgroundColor: theme.primary },
+            ]}
+          >
+            <Text
+              style={[
+                styles.chipText,
+                styles.chipTextActive,
+              ]}
+            >
+              All
+            </Text>
+          </Pressable>
+
+          <Pressable
+            style={[
+              styles.chip,
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.chipText,
+                { color: theme.text },
+              ]}
+            >
+              Income
+            </Text>
+          </Pressable>
+
+          <Pressable
+            style={[
+              styles.chip,
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.chipText,
+                { color: theme.text },
+              ]}
+            >
+              Expense
+            </Text>
+          </Pressable>
+        </View>
+
+        {/* Sections */}
+        {sections.map((section) => (
+          <View key={section.date} style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text
+                style={[
+                  styles.sectionDate,
+                  { color: theme.text },
+                ]}
+              >
+                {section.date}
+              </Text>
+
+              <Text
+                style={[
+                  styles.sectionTotal,
+                  section.income
+                    ? styles.income
+                    : styles.expense,
+                ]}
+              >
+                {section.total}
+              </Text>
             </View>
 
-            <Pressable style={styles.filterButton}>
-              <Ionicons name="options-outline" size={22} color="#111827" />
-            </Pressable>
-          </View>
-
-          {/* Filter Chips */}
-          <View style={styles.chipsRow}>
-            <Pressable style={[styles.chip, styles.chipActive]}>
-              <Text style={[styles.chipText, styles.chipTextActive]}>All</Text>
-            </Pressable>
-
-            <Pressable style={styles.chip}>
-              <Text style={styles.chipText}>Income</Text>
-            </Pressable>
-
-            <Pressable style={styles.chip}>
-              <Text style={styles.chipText}>Expense</Text>
-            </Pressable>
-          </View>
-
-          {/* Sections */}
-          {sections.map((section) => (
-            <View key={section.date} style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionDate}>{section.date}</Text>
-                <Text
-                  style={[
-                    styles.sectionTotal,
-                    section.income ? styles.income : styles.expense,
-                  ]}
-                >
-                  {section.total}
-                </Text>
-              </View>
-
-              <View style={styles.card}>
-                {section.data.map((item, index) => (
-                  <View key={item.title + item.time}>
-                    <View style={styles.transactionItem}>
-                      <View style={styles.left}>
-                        <View style={styles.iconCircle}>
-                          <Text style={styles.emoji}>{item.icon}</Text>
-                        </View>
-
-                        <View>
-                          <Text style={styles.title}>{item.title}</Text>
-                          <Text style={styles.time}>{item.time}</Text>
-                        </View>
-                      </View>
-
-                      <Text
+            <View
+              style={[
+                styles.card,
+                {
+                  backgroundColor: theme.card,
+                  borderColor: theme.border,
+                },
+              ]}
+            >
+              {section.data.map((item, index) => (
+                <View key={item.title + item.time}>
+                  <View style={styles.transactionItem}>
+                    <View style={styles.left}>
+                      <View
                         style={[
-                          styles.amount,
-                          item.income ? styles.income : styles.expense,
+                          styles.iconCircle,
+                          { backgroundColor: theme.card2 },
                         ]}
                       >
-                        {item.amount}
-                      </Text>
+                        <Text style={styles.emoji}>{item.icon}</Text>
+                      </View>
+
+                      <View>
+                        <Text
+                          style={[
+                            styles.title,
+                            { color: theme.text },
+                          ]}
+                        >
+                          {item.title}
+                        </Text>
+
+                        <Text
+                          style={[
+                            styles.time,
+                            { color: theme.subText },
+                          ]}
+                        >
+                          {item.time}
+                        </Text>
+                      </View>
                     </View>
 
-                    {index !== section.data.length - 1 && (
-                      <View style={styles.divider} />
-                    )}
+                    <Text
+                      style={[
+                        styles.amount,
+                        item.income
+                          ? styles.income
+                          : styles.expense,
+                      ]}
+                    >
+                      {item.amount}
+                    </Text>
                   </View>
-                ))}
-              </View>
-            </View>
-          ))}
-        </ScrollView>
 
-        {/* Floating Add Button */}
-        <Pressable style={styles.fab}>
-          <Ionicons name="add" size={32} color="white" />
-        </Pressable>
-      </View>
-    </SafeAreaView>
-  );
+                  {index !== section.data.length - 1 && (
+                    <View
+                      style={[
+                        styles.divider,
+                        { backgroundColor: theme.divider },
+                      ]}
+                    />
+                  )}
+                </View>
+              ))}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+
+      {/* Floating Add Button */}
+      <Pressable
+        style={[
+          styles.fab,
+          { backgroundColor: theme.primary },
+        ]}
+      >
+        <Ionicons name="add" size={32} color="white" />
+      </Pressable>
+    </View>
+  </SafeAreaView>
+);
 }
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
   },
 
   container: {
@@ -162,7 +290,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#111827',
     marginBottom: 24,
   },
 
@@ -175,29 +302,24 @@ const styles = StyleSheet.create({
   searchContainer: {
     flex: 1,
     height: 52,
-    backgroundColor: '#F9FAFB',
     borderRadius: 16,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
   },
 
   searchInput: {
     flex: 1,
     marginLeft: 10,
     fontSize: 15,
-    color: '#111827',
   },
 
   filterButton: {
     width: 52,
     height: 52,
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#F3F4F6',
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 12,
@@ -213,20 +335,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
   },
 
   chipActive: {
-    backgroundColor: Colors.primary,
-    borderColor: Colors.primary,
+    borderWidth: 1,
   },
 
   chipText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#374151',
   },
 
   chipTextActive: {
@@ -247,7 +365,6 @@ const styles = StyleSheet.create({
   sectionDate: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
   },
 
   sectionTotal: {
@@ -256,10 +373,8 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
     overflow: 'hidden',
   },
 
@@ -280,7 +395,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#F9FAFB',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 14,
@@ -293,12 +407,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
   },
 
   time: {
     fontSize: 13,
-    color: '#6B7280',
     marginTop: 3,
   },
 
@@ -312,12 +424,11 @@ const styles = StyleSheet.create({
   },
 
   expense: {
-    color: '#111827',
+    color: '#EF4444',
   },
 
   divider: {
     height: 1,
-    backgroundColor: '#F3F4F6',
     marginLeft: 80,
   },
 
@@ -328,7 +439,6 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: Colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#16A34A',
