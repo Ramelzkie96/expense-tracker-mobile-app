@@ -6,6 +6,13 @@ export default function RootLayout() {
     <ThemeProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen
+        name="add-transaction"
+        options={{
+          presentation: 'card',
+          animation: 'slide_from_right',
+        }}
+      />
         <Stack.Screen name="(auth)" />
       </Stack>
     </ThemeProvider>

@@ -23,11 +23,10 @@ export default function TabLayout() {
           paddingBottom: 6,
           backgroundColor: theme.card,
           borderTopWidth: 0,
-
           shadowColor: '#000',
           shadowOpacity: 0.12,
           shadowRadius: 12,
-          shadowOffset: { width: 0, height: 4 },
+          shadowOffset: { width: 0, height: 4},
           elevation: 8,
         },
 
@@ -38,54 +37,55 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name='index'
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
+          tabBarIcon: ({ color, size}) => (
+            <Ionicons name='home' size={size} color={color} />
           ),
         }}
       />
 
       <Tabs.Screen
-        name="transactions"
+        name='transactions'
         options={{
           title: 'Transactions',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="receipt-outline" size={size} color={color} />
-          ),
+          tabBarIcon: ({color, size}) => (
+            <Ionicons name='receipt-outline' size={size} color={color} />
+          )
         }}
       />
 
       <Tabs.Screen
-        name="analytics"
+        name='analytics'
         options={{
           title: 'Analytics',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="bar-chart-outline" size={size} color={color} />
-          ),
+            <Ionicons name='bar-chart-outline' size={size} color={color}/>
+          )
         }}
       />
 
       <Tabs.Screen
-        name="budgets"
+        name='budgets'
         options={{
           title: 'Budgets',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="wallet-outline" size={size} color={color} />
-          ),
+            <Ionicons name='wallet-outline' size={size} color={color}/>
+          )
         }}
       />
 
       <Tabs.Screen
-        name="settings"
+        name='settings'
         options={{
           title: 'Settings',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings-outline" size={size} color={color} />
-          ),
+            <Ionicons name='settings-outline' size={size} color={color}/>
+          )
         }}
       />
+
     </Tabs>
   );
 }

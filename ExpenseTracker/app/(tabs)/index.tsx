@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet, ScrollView, Pressable, } from 'react-native'; 
+import { View, Text, StyleSheet, ScrollView, Pressable, Modal, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/context/ThemeContext';
+import { useState } from 'react';
+import { router } from 'expo-router';
 
 const transactions = [
   {
@@ -48,6 +50,7 @@ const transactions = [
 
 export default function HomeScreen() {
   const { darkMode, theme } = useTheme();
+  const [period, setPeriod] = useState('This Month'); const [showPeriodMenu, setShowPeriodMenu] = useState(false);
   return (
   <SafeAreaView
     style={[styles.safeArea, { backgroundColor: theme.background }]}
@@ -112,24 +115,70 @@ export default function HomeScreen() {
 
               <View
                 style={[
-                  styles.monthBadge,
-                  { backgroundColor: theme.card2 },
+                  styles.pickerContainer,
+                  {
+                    backgroundColor: theme.card2,
+                    borderColor: theme.border,
+                  },
                 ]}
               >
-                <Text
+                <Pressable
                   style={[
-                    styles.monthText,
-                    { color: theme.subText },
+                    styles.monthBadge,
+                    { backgroundColor: theme.card2, borderColor: theme.border },
                   ]}
+                  onPress={() => setShowPeriodMenu(true)}
                 >
-                  This Month
-                </Text>
+                  <Text style={[styles.monthText, { color: theme.subText }]}>
+                    {period}
+                  </Text>
 
-                <Ionicons
-                  name="chevron-down"
-                  size={16}
-                  color={theme.subText}
-                />
+                  <Ionicons
+                    name="chevron-down"
+                    size={16}
+                    color={theme.subText}
+                  />
+                </Pressable>
+
+                <Modal
+                  visible={showPeriodMenu}
+                  transparent
+                  animationType="fade"
+                  onRequestClose={() => setShowPeriodMenu(false)}
+                >
+                  <Pressable
+                    style={styles.modalOverlay}
+                    onPress={() => setShowPeriodMenu(false)}
+                  >
+                    <View
+                      style={[
+                        styles.modalContent,
+                        { backgroundColor: theme.card, borderColor: theme.border },
+                      ]}
+                    >
+                      {['This Week', 'This Month', 'This Year'].map((item) => (
+                        <Pressable
+                          key={item}
+                          style={styles.modalItem}
+                          onPress={() => {
+                            setPeriod(item);
+                            setShowPeriodMenu(false);
+                          }}
+                        >
+                          <Text
+                            style={[
+                              styles.modalText,
+                              { color: theme.text },
+                              period === item && { color: theme.primary, fontWeight: '700' },
+                            ]}
+                          >
+                            {item}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </View>
+                  </Pressable>
+                </Modal>
               </View>
             </View>
 
@@ -143,6 +192,8 @@ export default function HomeScreen() {
             </Text>
           </View>
         </View>
+
+        
 
         {/* Income & Expenses */}
         <View style={styles.statsRow}>
@@ -316,14 +367,15 @@ export default function HomeScreen() {
 
         {/* Add Transaction */}
         <Pressable
-          style={[
-            styles.addButton,
-            { backgroundColor: theme.primary },
-          ]}
-        >
-          <Ionicons name="add" size={22} color="white" />
-          <Text style={styles.addButtonText}>Add Transaction</Text>
-        </Pressable>
+            style={[
+              styles.addButton,
+              { backgroundColor: theme.primary },
+            ]}
+            onPress={() => router.push('/add-transaction')}
+          >
+            <Ionicons name="add" size={22} color="white" />
+            <Text style={styles.addButtonText}>Add Transaction</Text>
+          </Pressable>
       </ScrollView>
     </View>
   </SafeAreaView>
@@ -410,21 +462,43 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
-  monthBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F9FAFB',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 16,
-  },
+ monthBadge: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingHorizontal: 14,
+  paddingVertical: 10,
+  borderRadius: 16,
+  borderWidth: 1,
+  gap: 6,
+},
 
-  monthText: {
-    color: '#6B7280',
-    fontWeight: '600',
-    marginRight: 4,
-    fontSize: 14,
-  },
+monthText: {
+  fontWeight: '600',
+  fontSize: 14,
+},
+
+modalOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.2)',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
+modalContent: {
+  width: 220,
+  borderRadius: 20,
+  borderWidth: 1,
+  overflow: 'hidden',
+},
+
+modalItem: {
+  paddingVertical: 16,
+  paddingHorizontal: 20,
+},
+
+modalText: {
+  fontSize: 16,
+},
 
   balanceAmount: {
     fontSize: 32,
@@ -569,5 +643,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     marginLeft: 8,
+  },
+
+  pickerContainer: {
+    width: 150,
+    height: 44,
+    borderRadius: 14,
+    justifyContent: 'center',
+    overflow: 'hidden',
+    borderWidth: 1,
+  },
+
+  picker: {
+    width: 150,
+    height: 44,
   },
 });
